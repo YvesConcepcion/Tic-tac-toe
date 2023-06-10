@@ -1,11 +1,10 @@
-.grid {
+#grid {
   display: grid;
   grid-gap: 10px;
   border: 2px solid green;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(3, 1fr);
 }
-
 .board {
   width: 150px;
   height: 150px;

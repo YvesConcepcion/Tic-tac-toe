@@ -1,8 +1,6 @@
 "use strict";
 
 // Retrieve elements
-const boards = document.querySelectorAll(".board");
-
 const createPlayer = (name, symbol) => {
   return {
     name: name,
@@ -12,24 +10,44 @@ const createPlayer = (name, symbol) => {
 };
 
 const game = (() => {
-  let gameBoard = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-  ];
+  //Create gameBoard
+  let gameBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const container = document.getElementById("grid");
+  for (let i = 0; i < gameBoard.length; i++) {
+    const div = document.createElement("div");
+    div.classList.add("board");
+
+    container.appendChild(div);
+  }
+  const boards = document.querySelectorAll(".board");
   const player1 = createPlayer("Player 1", "X");
   const player2 = createPlayer("Player2", "O");
   let activePlayer = player1;
   const switchPlayerturn = () =>
     (activePlayer = activePlayer === player1 ? player2 : player1);
-  const playRound = boards.forEach(function (board) {
-    board.addEventListener("click", function (e) {
-      console.log();
+
+  const playRound = boards.forEach(function (board, i) {
+    board.addEventListener("click", function () {
+      gameBoard[i] = activePlayer.symbol;
       board.textContent = activePlayer.symbol;
       switchPlayerturn();
+      console.log(gameBoard);
     });
   });
 })();
+
+// const winConditions = [
+//   [0, 1, 2],
+//   [3, 4, 5],
+//   [6, 7, 8],
+//   [0, 3, 6],
+//   [1, 4, 7],
+//   [2, 5, 8],
+//   [0, 4, 8],
+//   [2, 4, 6],
+// ];
+
+//check for win conditions
 
 // play: function () {
 //   board.addEventListener("click", function (e) {
