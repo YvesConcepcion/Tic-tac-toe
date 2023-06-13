@@ -5,30 +5,46 @@ const createPlayer = (name, symbol) => {
   return {
     name: name,
     symbol: symbol,
-    score: 0,
   };
 };
 
-let gameBoard = ["", "", "", "", "", "", "", "", ""];
-const container = document.getElementById("grid");
-for (let i = 0; i < gameBoard.length; i++) {
-  const div = document.createElement("div");
-  div.classList.add("board");
+let gameBoard;
 
-  container.appendChild(div);
-}
+const clearBoard = () => {
+  gameBoard = ["", "", "", "", "", "", "", "", ""];
+  const boards = document.querySelectorAll(".board");
+
+  boards.forEach((board) => {
+    board.textContent = "";
+  });
+};
+
+const init = function () {
+  clearBoard();
+  const container = document.getElementById("grid");
+  for (let i = 0; i < gameBoard.length; i++) {
+    const div = document.createElement("div");
+    div.classList.add("board");
+    div.setAttribute("data-index", [i]);
+    container.appendChild(div);
+  }
+  return;
+};
+
 const player1 = createPlayer("Player 1", "X");
 const player2 = createPlayer("Player2", "O");
 
 const game = (() => {
+  let playing = true;
   //Create gameBoard
-  const boards = document.querySelectorAll(".board");
+  init();
   let activePlayer = player1;
+  const boards = document.querySelectorAll(".board");
+
   const switchPlayerturn = () =>
     (activePlayer = activePlayer === player1 ? player2 : player1);
-
   //Win Conditions
-  let roundWinner;
+  let winner;
   const winConditions = [
     [0, 1, 2],
     [3, 4, 5],
@@ -51,9 +67,9 @@ const game = (() => {
         continue;
       }
       if (cellA == cellB && cellB == cellC) {
-        roundWinner = true;
-        activePlayer.score += 1;
-        console.log(`${activePlayer.name} wins! Score: ${activePlayer.score}`);
+        winner = true;
+        setTimeout(clearBoard, 5000);
+        console.log(`${activePlayer.name} wins!`);
         break;
       }
     }
@@ -61,11 +77,9 @@ const game = (() => {
 
   const playRound = boards.forEach(function (board, i) {
     board.addEventListener("click", function () {
-      if (gameBoard[i] != "" || roundWinner == true) {
-        return;
-      }
+      if (gameBoard[i] != "") return;
       gameBoard[i] = activePlayer.symbol;
-      board.textContent = activePlayer.symbol;
+      board.setAttribute("data-symbol", activePlayer.symbol);
       checkWinner();
       switchPlayerturn();
     });
