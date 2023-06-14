@@ -9,12 +9,15 @@
   </head>
   <body>
     <header>
-      <logo>Tic-Tac-Toe</logo>
       <div class="turn-state"></div>
       <button class="restart">↻</button>
     </header>
     <main>
-      <div id="grid"></div>
+      <div class="logo"></div>
+      <div id="grid" class="inactive"></div>
+      <div class="description">
+        <div class="player" data-symbol="X"></div>
+        <div>turn</div>
     </main>
   </body>
   <script src="script.js"></script>
