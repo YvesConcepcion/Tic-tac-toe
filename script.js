@@ -33,16 +33,16 @@ const init = function () {
 };
 
 const player1 = createPlayer("Player 1", "X");
-const player2 = createPlayer("Player2", "O");
+const player2 = createPlayer("Player 2", "O");
 let activePlayer = player1;
 
 const game = (() => {
-  let playing = true;
   init();
   const boards = document.querySelectorAll(".board");
 
   const switchPlayerturn = () =>
     (activePlayer = activePlayer === player1 ? player2 : player1);
+
   //Win Conditions
   let winner;
   const winConditions = [
@@ -55,12 +55,16 @@ const game = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
   function checkWinner() {
-    let isTie = gameBoard.every((board) => board !== "");
+    const descEl = document.getElementById("desc");
+    const isTie = gameBoard.every((board) => board !== "");
+
     if (isTie) {
-      console.log(`TIE`);
+      descEl.textContent = `It's a tie!`;
       return;
     }
+
     for (let i = 0; i < winConditions.length; i++) {
       const condition = winConditions[i];
       const cellA = gameBoard[condition[0]];
@@ -72,7 +76,7 @@ const game = (() => {
       }
       if (cellA == cellB && cellB == cellC) {
         winner = true;
-        setTimeout(clearBoard, 5000);
+        descEl.textContent = `${activePlayer.symbol} wins!`;
         console.log(`${activePlayer.name} wins!`);
         break;
       }
@@ -80,14 +84,16 @@ const game = (() => {
   }
 
   const playRound = boards.forEach(function (board, i) {
-    const turn = document.querySelector("player");
+    const playerTurn = document.querySelector(".player");
+    console.log(playerTurn);
     board.addEventListener("click", function () {
       if (gameBoard[i] != "" || winner == true) return;
       gameBoard[i] = activePlayer.symbol;
       board.setAttribute("data-symbol", activePlayer.symbol);
-      board.classList.remove("active");
       checkWinner();
+      board.classList.remove("active");
       switchPlayerturn();
+      playerTurn.setAttribute("data-symbol", activePlayer.symbol);
     });
   });
 })();
